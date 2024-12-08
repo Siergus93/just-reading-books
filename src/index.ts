@@ -1,12 +1,19 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
+import bookRouter from "./routers/book.router";
+import database from "./database/database";
+import cors from "cors";
 
+database.connect();
 const app: Express = express();
-const port = process.env.PORT || 3000;
+//possible upgrade - move port value to .env file
+const port = process.env.PORT || 3001;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+app.use(express.urlencoded());
+app.use(cors());
+app.use(express.json());
 
-app.listen(port, () => {
+app.use("/api/books", bookRouter);
+
+app.listen(port, async () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
